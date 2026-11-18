@@ -13,7 +13,13 @@
 //     cost, stop loss at STOP_LOSS_BPS under it, a trailing stop of
 //     TRAIL_BPS below the best value seen since entry, or a time stop after
 //     MAX_HOLD_BARS bars held, so a position that never bounces is not
-//     carried into the next wave.
+//     carried into the next wave. The time stop is 400 bars, not 360: on
+//     the dev window both winning trades were still exiting through the
+//     time stop while the snap-back drifted up (~0.26-0.43 bps/bar), and a
+//     sweep of the hold (390/395/400/405/410/420 bars) all beat the 360-bar
+//     hold, so the extra 40 bars capture more of the drift the bot is
+//     already riding instead of cutting it short; the take-profit, stop
+//     and trailing exits still bound the hold on both sides.
 //   - One position at a time, long only, full size.
 //
 // This is a reversal bot, not a trend bot: it never buys a breakout and never
@@ -37,7 +43,7 @@ const DIP_BPS = 100;
 const TAKE_PROFIT_BPS = 150;
 const STOP_LOSS_BPS = 80;
 const TRAIL_BPS = 150;
-const MAX_HOLD_BARS = 360;
+const MAX_HOLD_BARS = 400;
 const MAX_SLIPPAGE_BPS = 100;
 const BPS = 10000n;
 
